@@ -1,0 +1,12 @@
+body{
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 110px);
+    justify-content: center;
+    align-content: center;
+    height: 100vh;
+}
+.cell{
+    border: 1px black solid;
+    height: 100px;
+}

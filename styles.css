@@ -21,6 +21,7 @@ body{
 button{
     border-style: none;
     font-size: 1.4rem;
+    cursor: pointer;
 }
 .start-game{
     background-color: #22c55e;
