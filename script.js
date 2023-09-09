@@ -13,16 +13,16 @@
 // console.log(fillBoard);
 
 const body = document.querySelector("body");
+
+
 const gameBoard = (() => {
-    const board = document.createElement("div");
-    board.className = "board";
-    body.appendChild(board);
-    let i = 0;
+const board = document.querySelector(".board");
     const empty = [
         ['', '', ''],
         ['', '', ''],
         ['', '', '']
     ];
+
     const create = empty.forEach((row, rowIndex)=> {
         row.forEach((cell, cellIndex) => {
             const boardCell = document.createElement("div");
@@ -31,43 +31,42 @@ const gameBoard = (() => {
             boardCell.addEventListener("click", e => {
                 if(e.target.textContent == ""){
                     e.target.textContent = playerMarker;
-                    i++;
+                    aiPlaceMarker();
                 }
             })
         })
     })
-    const playerMarker = prompt("x or o");
-    const c = document.querySelectorAll(".row2");
-    const p = document.querySelectorAll(".row3");
-    c.forEach(cell => {
-        cell.textContent = "x";
-    })
-    p.forEach(cell => {
-        cell.textContent = "x";
-    })
 
-    return {create, playerMarker, i};
+    const playerMarker = prompt("x or o");
+
+    let aiMarker;
+    playerMarker == 'x' ? aiMarker = 'o': aiMarker = 'x';
+
+    return {create, playerMarker, aiMarker};
 })();
 const player = (name="player") => {
     return {name};
 }
-function playGame(){
-    const chooseTurn = [true, false];
-    let playerTurn = false;
-    if(playerTurn == false){
+function aiPlaceMarker(){
         let randomCell;
         do{
             const rowNumber = Math.floor(1 + Math.random () * 3);
             const colNumber = Math.floor(1 + Math.random () * 3);    
             randomCell = document.querySelector(`.row${rowNumber}.col${colNumber}`)
-        }while(randomCell.textContent != "")
-        if(gameBoard.playerMarker == "x"){
-            randomCell.textContent = "o";
-        }
-        else{
-            randomCell.textContent = "x";
-        }
-    }
-
+        }while(randomCell.textContent != "" || gameBoard.i > 4)
+        console.log(gameBoard.i);
+        randomCell.textContent = gameBoard.aiMarker;
 }
-playGame();
+
+const playerTurn = (() => {
+    const chooseTurn = [true, false];
+    const odd = gameBoard.i % 2 == 1;
+    const playerTurn = chooseTurn[Math.floor(Math.random() * 2)];
+    console.log(playerTurn);
+    if(playerTurn){
+        return;
+    }
+    else{
+        aiPlaceMarker();
+    }
+})();
