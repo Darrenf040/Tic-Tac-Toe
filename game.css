@@ -1,12 +1,38 @@
 body{
     margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.board{
     display: grid;
     grid-template-columns: repeat(3, 110px);
-    justify-content: center;
-    align-content: center;
-    height: 100vh;
+
 }
 .cell{
     border: 1px black solid;
     height: 100px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.cell:hover{
+    background-color: black;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.btn-container{
+    display: flex;
+    gap: 80px;
+}
+.marker{
+    font-size: 100%;
+    margin: 0;
+    font-size: 3rem;
 }
