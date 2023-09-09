@@ -31,6 +31,7 @@ const board = document.querySelector(".board");
             boardCell.addEventListener("click", e => {
                 if(e.target.textContent == ""){
                     e.target.textContent = playerMarker;
+                    e.target.id = playerMarker;
                     aiPlaceMarker();
                 }
             })
@@ -44,25 +45,21 @@ const board = document.querySelector(".board");
 
     return {create, playerMarker, aiMarker};
 })();
-const player = (name="player") => {
-    return {name};
-}
+
 function aiPlaceMarker(){
         let randomCell;
         do{
             const rowNumber = Math.floor(1 + Math.random () * 3);
             const colNumber = Math.floor(1 + Math.random () * 3);    
             randomCell = document.querySelector(`.row${rowNumber}.col${colNumber}`)
-        }while(randomCell.textContent != "" || gameBoard.i > 4)
-        console.log(gameBoard.i);
+        }while(randomCell.textContent != "")
+        randomCell.id = gameBoard.aiMarker;
         randomCell.textContent = gameBoard.aiMarker;
 }
 
 const playerTurn = (() => {
     const chooseTurn = [true, false];
-    const odd = gameBoard.i % 2 == 1;
     const playerTurn = chooseTurn[Math.floor(Math.random() * 2)];
-    console.log(playerTurn);
     if(playerTurn){
         return;
     }
@@ -70,3 +67,4 @@ const playerTurn = (() => {
         aiPlaceMarker();
     }
 })();
+
