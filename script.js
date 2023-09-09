@@ -27,18 +27,14 @@ const gameBoard = (() => {
             const boardCell = document.createElement("div");
             boardCell.className = `cell row${rowIndex + 1} col${cellIndex + 1}`;
             board.appendChild(boardCell);
+            boardCell.addEventListener("click", e => {
+                e.target.textContent = playerMarker;
+            })
         })
-    })
-    const add = board.addEventListener("click", e => {
-        const p = document.createElement("p")
-        p.className = "marker"
-        p.textContent = playerMarker
-        e.target.appendChild(p)
-        // e.target.textContent = playerMarker;
     })
     const playerMarker = prompt("x or o");
     
-    return {create, add, playerMarker};
+    return {create, playerMarker};
 })();
 const player = (name="player") => {
     return {name};
