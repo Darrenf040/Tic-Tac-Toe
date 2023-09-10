@@ -16,7 +16,8 @@ const body = document.querySelector("body");
 
 
 const gameBoard = (() => {
-const board = document.querySelector(".board");
+    const board = document.querySelector(".board");
+    let i = 1;
     const empty = [
         ['', '', ''],
         ['', '', ''],
@@ -26,12 +27,14 @@ const board = document.querySelector(".board");
     const create = empty.forEach((row, rowIndex)=> {
         row.forEach((cell, cellIndex) => {
             const boardCell = document.createElement("div");
-            boardCell.className = `cell row${rowIndex + 1} col${cellIndex + 1}`;
+            boardCell.className = `cell`;
+            boardCell.id = i;
+            i++;
             board.appendChild(boardCell);
             boardCell.addEventListener("click", e => {
                 if(e.target.textContent == ""){
                     e.target.textContent = playerMarker;
-                    e.target.id = playerMarker;
+                    e.target.classList.add(playerMarker);
                     aiPlaceMarker();
                 }
             })
@@ -49,11 +52,10 @@ const board = document.querySelector(".board");
 function aiPlaceMarker(){
         let randomCell;
         do{
-            const rowNumber = Math.floor(1 + Math.random () * 3);
-            const colNumber = Math.floor(1 + Math.random () * 3);    
-            randomCell = document.querySelector(`.row${rowNumber}.col${colNumber}`)
+            const randomID = Math.floor(1 + Math.random() * 9);   
+            randomCell = document.getElementById(randomID);
         }while(randomCell.textContent != "")
-        randomCell.id = gameBoard.aiMarker;
+        randomCell.classList.add(gameBoard.aiMarker);
         randomCell.textContent = gameBoard.aiMarker;
 }
 
@@ -68,3 +70,10 @@ const playerTurn = (() => {
     }
 })();
 
+function winner(){
+    const winningCombo = [
+        [1,2,3], [4,5,6], [7,8,9],
+        [1,4,7], [2,5,8], [3,6,9],
+        [1,5,9], [3,5,7]
+    ];
+}
