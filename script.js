@@ -99,10 +99,12 @@ function winner(){
         let [a,b,c] = arrays; //each letter corosponds to each arrays index
                               //a being index 0 of each array
         let board = gameBoard.boardArray;
+        let playerMarker = gameBoard.playerMarker;
         //if one of the board[a] indexes has a value 
         //check if the other columns with winning indexes text match
-        if(board[a] && board[a] == board[b] && board[a] == board[c]){
+        if(board[a] && board[a] == board[b] && board[a] == board[c] && playerMarker == board[a]){
             playerWin = true;
+            console.log("player wins");
             return playerWin;
         }
     }
