@@ -102,11 +102,20 @@ function winner(){
         let playerMarker = gameBoard.playerMarker;
         //if one of the board[a] indexes has a value 
         //check if the other columns with winning indexes text match
-        if(board[a] && board[a] == board[b] && board[a] == board[c] && playerMarker == board[a]){
-            playerWin = true;
-            console.log("player wins");
-            return playerWin;
+        if(board[a] && board[a] == board[b] && board[a] == board[c]){
+            if(playerMarker == board[a]){
+                playerWin = true;
+                console.log("player wins");
+                console.log(playerWin);
+                return playerWin;
+            }
+            else {
+                console.log("AI wins");
+                console.log(playerWin);
+                return playerWin;
+            }
         }
+        //
     }
     return playerWin;
 }
