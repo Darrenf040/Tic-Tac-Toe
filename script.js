@@ -48,15 +48,22 @@ const gameBoard = (() => {
 })();
 
 function aiPlaceMarker(){
-        let randomCell;
-        let randomID;
-        do{
-            randomID = Math.floor(Math.random() * 9); 
-            randomCell = document.getElementById(randomID);
-        }while(randomCell.textContent != "")
-        gameBoard.boardArray[randomID] = gameBoard.aiMarker;
-        randomCell.classList.add(gameBoard.aiMarker);
-        randomCell.textContent = gameBoard.aiMarker;
+    const allCells = Array.from(document.querySelectorAll(".cell"));
+
+    //returns true if array isnt full
+    const notFull = allCells.some(cell => {
+        return cell.textContent == '';
+    })
+
+    let randomCell;
+    let randomID;
+    do{
+        randomID = Math.floor(Math.random() * 9); 
+        randomCell = document.getElementById(randomID);
+    }while(randomCell.textContent != "" && notFull)
+    gameBoard.boardArray[randomID] = gameBoard.aiMarker;
+    randomCell.classList.add(gameBoard.aiMarker);
+    randomCell.textContent = gameBoard.aiMarker;
 }
 
 const playerTurn = (() => {
