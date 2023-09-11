@@ -28,10 +28,13 @@ const gameBoard = (() => {
             board.appendChild(boardCell);
             boardCell.addEventListener("click", e => {
                 if(e.target.textContent == ""){
+                    //add text to board & update array with player/ai markers
                     let id = e.target.id;
                     gameBoard.boardArray[id] = playerMarker;
                     e.target.textContent = playerMarker;
                     e.target.classList.add(playerMarker);
+
+                    //after user places marker, ai places 
                     aiPlaceMarker();
                     winner();
                 }
@@ -78,6 +81,7 @@ const playerTurn = (() => {
 })();
 
 function winner(){
+    let playerWin = false;
     const winningCombo = [
         [0,1,2], 
         [3,4,5], 
@@ -98,7 +102,9 @@ function winner(){
         //if one of the board[a] indexes has a value 
         //check if the other columns with winning indexes text match
         if(board[a] && board[a] == board[b] && board[a] == board[c]){
-            console.log('win');
+            playerWin = true;
+            return playerWin;
         }
     }
+    return playerWin;
 }
