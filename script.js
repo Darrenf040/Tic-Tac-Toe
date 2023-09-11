@@ -17,15 +17,10 @@ const body = document.querySelector("body");
 
 const gameBoard = (() => {
     const board = document.querySelector(".board");
-    let i = 1;
-    const empty = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-    ];
+    let i = 0;
+    const boardArray = ['', '', '', '', '', '','', '', ''];
 
-    const create = empty.forEach((row, rowIndex)=> {
-        row.forEach((cell, cellIndex) => {
+    const create = boardArray.forEach(element => {
             const boardCell = document.createElement("div");
             boardCell.className = `cell`;
             boardCell.id = i;
@@ -33,28 +28,33 @@ const gameBoard = (() => {
             board.appendChild(boardCell);
             boardCell.addEventListener("click", e => {
                 if(e.target.textContent == ""){
+                    let id = e.target.id;
+                    gameBoard.boardArray[id] = playerMarker;
                     e.target.textContent = playerMarker;
                     e.target.classList.add(playerMarker);
                     aiPlaceMarker();
+                    winner();
                 }
             })
-        })
     })
 
-    const playerMarker = prompt("x or o");
+    // const playerMarker = prompt("x or o");
+    const playerMarker = 'x';
 
     let aiMarker;
     playerMarker == 'x' ? aiMarker = 'o': aiMarker = 'x';
 
-    return {create, playerMarker, aiMarker};
+    return {boardArray, create, playerMarker, aiMarker};
 })();
 
 function aiPlaceMarker(){
         let randomCell;
+        let randomID;
         do{
-            const randomID = Math.floor(1 + Math.random() * 9);   
+            randomID = Math.floor(Math.random() * 9); 
             randomCell = document.getElementById(randomID);
         }while(randomCell.textContent != "")
+        gameBoard.boardArray[randomID] = gameBoard.aiMarker;
         randomCell.classList.add(gameBoard.aiMarker);
         randomCell.textContent = gameBoard.aiMarker;
 }
@@ -72,8 +72,26 @@ const playerTurn = (() => {
 
 function winner(){
     const winningCombo = [
-        [1,2,3], [4,5,6], [7,8,9],
-        [1,4,7], [2,5,8], [3,6,9],
-        [1,5,9], [3,5,7]
+        [0,1,2], 
+        [3,4,5], 
+        [6,7,8],
+        [0,3,6], 
+        [1,4,7], 
+        [2,5,8],
+        [0,4,8], 
+        [2,4,6]
     ];
+    //go through each array in winningCombo
+    //once a value is added on the left column (a), 
+    //check if marker values are the same while using winner indexes on the last 2 columns
+    for (const arrays of winningCombo) {
+        let [a,b,c] = arrays; //each letter corosponds to each arrays index
+                              //a being index 0 of each array
+        let board = gameBoard.boardArray;
+        //if one of the board[a] indexes has a value 
+        //check if the other columns with winning indexes text match
+        if(board[a] && board[a] == board[b] && board[a] == board[c]){
+            console.log('win');
+        }
+    }
 }
