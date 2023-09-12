@@ -36,7 +36,8 @@ const gameBoard = (() => {
 
                     //after user places marker, ai places 
                     aiPlaceMarker();
-                    winner();
+                    //variable for winner factory function (access variable and fucntions inside)
+                    const win = winner();
                 }
             })
     })
@@ -80,8 +81,7 @@ const playerTurn = (() => {
     }
 })();
 
-function winner(){
-    let playerWin = false;
+const winner = () => {
     const winningCombo = [
         [0,1,2], 
         [3,4,5], 
@@ -95,27 +95,31 @@ function winner(){
     //go through each array in winningCombo
     //once a value is added on the left column (a), 
     //check if marker values are the same while using winner indexes on the last 2 columns
-    for (const arrays of winningCombo) {
+    const playerWin = () => {
+        for (const arrays of winningCombo) {
         let [a,b,c] = arrays; //each letter corosponds to each arrays index
                               //a being index 0 of each array
         let board = gameBoard.boardArray;
         let playerMarker = gameBoard.playerMarker;
         //if one of the board[a] indexes has a value 
         //check if the other columns with winning indexes text match
-        if(board[a] && board[a] == board[b] && board[a] == board[c]){
-            if(playerMarker == board[a]){
-                playerWin = true;
-                console.log("player wins");
-                console.log(playerWin);
-                return playerWin;
-            }
-            else {
-                console.log("AI wins");
-                console.log(playerWin);
-                return playerWin;
+            if(board[a] && board[a] == board[b] && board[a] == board[c]){
+                //if player marker matches with the winning markers then player wins
+                if(playerMarker == board[a]){
+                    return true
+                }
+                //ai wins
+                else {
+                    return false;
+                }
             }
         }
-        //
     }
-    return playerWin;
-}
+
+    let isWinner;
+    //returns true if ai or player wins
+    if(playerWin() || playerWin() == false){
+        isWinner = true;
+    }
+    return {isWinner, playerWin};
+};
