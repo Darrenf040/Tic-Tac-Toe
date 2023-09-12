@@ -24,9 +24,27 @@ button{
     cursor: pointer;
 }
 .start-game{
+    padding: 15px 0;
+    width: 180px;
+}
+.start-game:hover{
+    transition: .3s;
+    font-size: 1.5rem;
+}
+.easy{
     background-color: #22c55e;
-    padding: 20px;
+}
+.medium{
+    background-color: blue;
+}
+.hard{
+    background-color:red;
+}
+.btn-container{
+    display: flex;
+    gap: 5%;
+    justify-content: center;
+    width: 100%;
     position: absolute;
     top: 50%;
-    left: 50%;
 }

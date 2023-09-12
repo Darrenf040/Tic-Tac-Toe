@@ -9,7 +9,7 @@ body{
 .board{
     display: grid;
     grid-template-columns: repeat(3, 110px);
-
+    border: none;
 }
 .cell{
     border: 1px black solid;
@@ -17,11 +17,9 @@ body{
     display: grid;
     justify-content: center;
     align-items: center;
+    font-size: 5rem;
+    cursor: pointer;
 }
-.cell:hover{
-    background-color: black;
-}
-
 button{
     background-color: transparent;
     border: none;
@@ -35,4 +33,10 @@ button{
     font-size: 100%;
     margin: 0;
     font-size: 3rem;
+}
+.x{
+    color: red;
+}
+.o{
+    color: blue;
 }
