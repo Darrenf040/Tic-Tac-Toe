@@ -40,3 +40,12 @@ button{
 .o{
     color: blue;
 }
+img{
+    width: 150px;
+}
+.x-choice:hover{
+    background-color: red;
+}
+.o-choice:hover{
+    background-color: blue;
+}

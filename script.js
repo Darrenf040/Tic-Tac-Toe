@@ -23,14 +23,21 @@ const gameBoard = (() => {
                     //after user places marker, ai places 
                     aiPlaceMarker();
                     //variable for winner factory function (access variable and fucntions inside)
-                    const win = winner();
                 }
+                const win = winner();
+                if(win.isWinner){
+                    boardArray.fill("")
+                    const res = reset();
+                    res.playAgain();
+                    res.quit();
+                }
+
             })
     })
 
     // const playerMarker = prompt("x or o");
-    const playerMarker = 'x';
 
+    let playerMarker = 'x';
     let aiMarker;
     playerMarker == 'x' ? aiMarker = 'o': aiMarker = 'x';
 
@@ -109,3 +116,39 @@ const winner = () => {
     }
     return {isWinner, playerWin};
 };
+function emptyBoardCells (){
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.className = 'cell';
+    })
+}
+const reset = () => {
+    const btnContainer = document.querySelector(".button-container");
+    const playAgainBtn = document.createElement('button');
+    playAgainBtn.className = 'play-again';
+    playAgainBtn.textContent = 'Play Again';
+
+    const quitBtn = document.createElement("button");
+    quitBtn.className = 'quit';
+    quitBtn.textContent = 'Quit';
+    btnContainer.append(playAgainBtn, quitBtn);
+
+    const playAgain = () => {
+        playAgainBtn.addEventListener("click", () => {
+            emptyBoardCells();
+            btnContainer.removeChild(playAgainBtn);
+            btnContainer.removeChild(btnContainer.lastChild)
+        })
+    }
+    const quit = () => {
+        const home = document.createElement("a");
+        home.href = 'index.html';
+        btnContainer.appendChild(home);    
+        home.appendChild(quitBtn);
+    }
+
+
+
+    return{playAgain, quit}
+}
