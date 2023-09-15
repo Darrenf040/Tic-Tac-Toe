@@ -20,18 +20,23 @@ const gameBoard = (() => {
                     e.target.textContent = playerMarker;
                     e.target.classList.add(playerMarker);
 
+                    const win = winner();
                     //after user places marker, ai places 
-                    aiPlaceMarker();
-                    //variable for winner factory function (access variable and fucntions inside)
+                    if(!win.isWinner){
+                        aiPlaceMarker();
+                    }
+                    
                 }
+                
                 const win = winner();
-                if(win.isWinner){
+                //if there is a winner or the board is full 
+                if(win.isWinner || win.tie){
                     boardArray.fill("")
                     const res = reset();
+                    res.popup.showModal();
                     res.playAgain();
                     res.quit();
                 }
-
             })
     })
 
@@ -45,19 +50,13 @@ const gameBoard = (() => {
 })();
 
 function aiPlaceMarker(){
-    const allCells = Array.from(document.querySelectorAll(".cell"));
-
-    //returns true if array isnt full
-    const notFull = allCells.some(cell => {
-        return cell.textContent == '';
-    })
 
     let randomCell;
     let randomID;
     do{
         randomID = Math.floor(Math.random() * 9); 
         randomCell = document.getElementById(randomID);
-    }while(randomCell.textContent != "" && notFull)
+    }while(randomCell.textContent != "" && !winner().tie)
     gameBoard.boardArray[randomID] = gameBoard.aiMarker;
     randomCell.classList.add(gameBoard.aiMarker);
     randomCell.textContent = gameBoard.aiMarker;
@@ -114,7 +113,13 @@ const winner = () => {
     if(playerWin() || playerWin() == false){
         isWinner = true;
     }
-    return {isWinner, playerWin};
+    const allCells = Array.from(document.querySelectorAll(".cell"));
+    //returns true if each board cell has text
+    const tie = allCells.every(cell => {
+        return cell.textContent != '';
+    })            
+
+    return {isWinner, playerWin, tie};
 };
 function emptyBoardCells (){
     const cells = document.querySelectorAll(".cell");
@@ -124,7 +129,7 @@ function emptyBoardCells (){
     })
 }
 const reset = () => {
-    const btnContainer = document.querySelector(".button-container");
+    const popup = document.querySelector(".button-container");
     const playAgainBtn = document.createElement('button');
     playAgainBtn.className = 'play-again';
     playAgainBtn.textContent = 'Play Again';
@@ -132,23 +137,24 @@ const reset = () => {
     const quitBtn = document.createElement("button");
     quitBtn.className = 'quit';
     quitBtn.textContent = 'Quit';
-    btnContainer.append(playAgainBtn, quitBtn);
+    popup.append(playAgainBtn, quitBtn);
 
     const playAgain = () => {
         playAgainBtn.addEventListener("click", () => {
             emptyBoardCells();
-            btnContainer.removeChild(playAgainBtn);
-            btnContainer.removeChild(btnContainer.lastChild)
+            popup.removeChild(playAgainBtn);
+            popup.removeChild(popup.lastChild);
+            popup.close();
         })
     }
     const quit = () => {
         const home = document.createElement("a");
         home.href = 'index.html';
-        btnContainer.appendChild(home);    
+        popup.appendChild(home);    
         home.appendChild(quitBtn);
     }
 
 
 
-    return{playAgain, quit}
+    return{playAgain, quit,popup}
 }
