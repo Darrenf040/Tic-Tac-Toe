@@ -31,6 +31,9 @@ const gameBoard = (() => {
                 const win = winner();
                 //if there is a winner or the board is full 
                 if(win.isWinner || win.tie){
+                    if(win.tie){
+                        win.msgContainer.textContent = 'Tie';
+                    }
                     boardArray.fill("")
                     const res = reset();
                     res.popup.showModal();
@@ -84,6 +87,7 @@ const winner = () => {
         [0,4,8], 
         [2,4,6]
     ];
+    const msgContainer = document.querySelector(".winner-msg");
     //go through each array in winningCombo
     //once a value is added on the left column (a), 
     //check if marker values are the same while using winner indexes on the last 2 columns
@@ -98,10 +102,12 @@ const winner = () => {
             if(board[a] && board[a] == board[b] && board[a] == board[c]){
                 //if player marker matches with the winning markers then player wins
                 if(playerMarker == board[a]){
-                    return true
+                    msgContainer.textContent = "You Win";
+                    return true;
                 }
                 //ai wins
                 else {
+                    msgContainer.textContent = 'AI Wins'
                     return false;
                 }
             }
@@ -119,7 +125,7 @@ const winner = () => {
         return cell.textContent != '';
     })            
 
-    return {isWinner, playerWin, tie};
+    return {isWinner, playerWin, tie, msgContainer};
 };
 function emptyBoardCells (){
     const cells = document.querySelectorAll(".cell");
@@ -141,6 +147,7 @@ const reset = () => {
 
     const playAgain = () => {
         playAgainBtn.addEventListener("click", () => {
+            winner().msgContainer.textContent = '';
             emptyBoardCells();
             popup.removeChild(playAgainBtn);
             popup.removeChild(popup.lastChild);
