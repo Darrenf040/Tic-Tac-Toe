@@ -22,7 +22,7 @@ const gameBoard = (() => {
 
                     const win = winner();
                     //after user places marker, ai places 
-                    if(!win.isWinner){
+                    if(!win.isWinner && !win.tie){
                         aiPlaceMarker();
                     }
                     
@@ -31,7 +31,7 @@ const gameBoard = (() => {
                 const win = winner();
                 //if there is a winner or the board is full 
                 if(win.isWinner || win.tie){
-                    if(win.tie){
+                    if(win.tie && !win.isWinner){
                         win.msgContainer.textContent = 'Tie';
                     }
                     boardArray.fill("")
@@ -65,16 +65,17 @@ function aiPlaceMarker(){
     randomCell.textContent = gameBoard.aiMarker;
 }
 
-const playerTurn = (() => {
+function playerTurn (){
     const chooseTurn = [true, false];
-    const playerTurn = chooseTurn[Math.floor(Math.random() * 2)];
-    if(playerTurn){
+    const turn = chooseTurn[Math.floor(Math.random() * 2)];
+    if(turn){
         return;
     }
     else{
-        aiPlaceMarker();
+        return aiPlaceMarker();
     }
-})();
+};
+playerTurn()
 
 const winner = () => {
     const winningCombo = [
@@ -152,6 +153,7 @@ const reset = () => {
             popup.removeChild(playAgainBtn);
             popup.removeChild(popup.lastChild);
             popup.close();
+            playerTurn();
         })
     }
     const quit = () => {
