@@ -88,6 +88,7 @@ const winner = () => {
         [0,4,8], 
         [2,4,6]
     ];
+    
     const msgContainer = document.querySelector(".winner-msg");
     //go through each array in winningCombo
     //once a value is added on the left column (a), 
@@ -162,8 +163,46 @@ const reset = () => {
         popup.appendChild(home);    
         home.appendChild(quitBtn);
     }
-
-
-
     return{playAgain, quit,popup}
 }
+
+const winningCombo = [
+    ["0","1","2"], 
+    ["3","4","5"], 
+    ["6","7","8"],
+    ["0","3","6"], 
+    ["1","4","7"], 
+    ["2","5","8"],
+    ["0","4","8"], 
+    ["2","4","6"]
+];
+function win(){
+    let k = 0;
+    let a = 0;
+    for(let i = 0; i < winningCombo.length; i++){
+        //reset when exiting a winning combo array
+        a = 0;
+        k = 0;
+        for(let j = 0; j < 3; j++){
+            //get the cell in a winningCombo value 
+            const cell = document.getElementById(winningCombo[i][j]);
+            console.log(winningCombo[i][j], k, a, cell);
+            //if the cells inside of one of the arrays all have a x class,
+            //return iterate k until it reaches 3 (a valid combo with the same markers)
+            if(winningCombo[i][j] == cell.id && cell.classList.contains("x")){
+                k++;
+                if(k >= 3){
+                    return true;
+                }
+            }
+            else if(winningCombo[i][j] == cell.id && cell.classList.contains("o")){
+                a++;
+                if(a >= 3){
+                    return true;
+                }
+            } 
+        }
+    }
+    return false;
+}
+
