@@ -4,7 +4,8 @@ const body = document.querySelector("body");
 const gameBoard = (() => {
     const board = document.querySelector(".board");
     let i = 0;
-    const boardArray = ['', '', '', '', '', '','', '', ''];
+    //array with values 0 - 8 to represent board placement
+    const boardArray = Array.from(Array(9).keys());
 
     const create = boardArray.forEach(element => {
             const boardCell = document.createElement("div");
@@ -23,7 +24,7 @@ const gameBoard = (() => {
                     const win = winner();
                     //after user places marker, ai places 
                     if(!win.isWinner && !win.tie){
-                        aiPlaceMarker();
+                        //call minimax function
                     }
                     
                 }
@@ -34,7 +35,7 @@ const gameBoard = (() => {
                     if(win.tie && !win.isWinner){
                         win.msgContainer.textContent = 'Tie';
                     }
-                    boardArray.fill("")
+                    // boardArray.fill("")
                     const res = reset();
                     res.popup.showModal();
                     res.playAgain();
@@ -52,19 +53,6 @@ const gameBoard = (() => {
     return {boardArray, create, playerMarker, aiMarker};
 })();
 
-function aiPlaceMarker(){
-
-    let randomCell;
-    let randomID;
-    do{
-        randomID = Math.floor(Math.random() * 9); 
-        randomCell = document.getElementById(randomID);
-    }while(randomCell.textContent != "" && !winner().tie)
-    gameBoard.boardArray[randomID] = gameBoard.aiMarker;
-    randomCell.classList.add(gameBoard.aiMarker);
-    randomCell.textContent = gameBoard.aiMarker;
-}
-
 function playerTurn (){
     const chooseTurn = [true, false];
     const turn = chooseTurn[Math.floor(Math.random() * 2)];
@@ -72,7 +60,7 @@ function playerTurn (){
         return;
     }
     else{
-        return aiPlaceMarker();
+        //return minimax function
     }
 };
 playerTurn()
@@ -151,6 +139,7 @@ const reset = () => {
         playAgainBtn.addEventListener("click", () => {
             winner().msgContainer.textContent = '';
             emptyBoardCells();
+            gameBoard.boardArray = Array.from(Array(9).keys());
             popup.removeChild(playAgainBtn);
             popup.removeChild(popup.lastChild);
             popup.close();
@@ -205,3 +194,15 @@ function win(){
     }
     return false;
 }
+
+function availableCellsArray(){
+    const newArr = gameBoard.boardArray.filter(element => {
+        //return array with integer element values
+        return typeof element == 'number';
+    })
+    return newArr;
+}
+body.addEventListener("click", () => {
+    console.log(availableCellsArray())
+})
+
