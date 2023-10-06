@@ -5,7 +5,7 @@ const gameBoard = (() => {
     const board = document.querySelector(".board");
     let i = 0;
     //array with values 0 - 8 to represent board placement
-    const boardArray = Array.from(Array(9).keys());
+    const boardArray = [0, 1, 2, 3, 4, 5,6,7,8]
 
     const create = boardArray.forEach(element => {
             const boardCell = document.createElement("div");
@@ -24,18 +24,19 @@ const gameBoard = (() => {
                     const win = winner();
                     //after user places marker, ai places 
                     if(!win.isWinner && !win.tie){
-                        //call minimax function
+                        placeAiMarker();
                     }
-                    
                 }
                 
+                //Reset board and dispaly Tie/win message
                 const win = winner();
-                //if there is a winner or the board is full 
                 if(win.isWinner || win.tie){
                     if(win.tie && !win.isWinner){
                         win.msgContainer.textContent = 'Tie';
                     }
-                    // boardArray.fill("")
+                    else if(win.playerWin() == false){
+                        win.msgContainer.textContent = 'You Lose';
+                    }
                     const res = reset();
                     res.popup.showModal();
                     res.playAgain();
@@ -55,7 +56,8 @@ const gameBoard = (() => {
 
 function playerTurn (){
     const chooseTurn = [true, false];
-    const turn = chooseTurn[Math.floor(Math.random() * 2)];
+    // const turn = chooseTurn[Math.floor(Math.random() * 2)];
+    let turn = true;
     if(turn){
         return;
     }
@@ -92,12 +94,10 @@ const winner = () => {
             if(board[a] && board[a] == board[b] && board[a] == board[c]){
                 //if player marker matches with the winning markers then player wins
                 if(playerMarker == board[a]){
-                    msgContainer.textContent = "You Win";
                     return true;
                 }
                 //ai wins
                 else {
-                    msgContainer.textContent = 'AI Wins'
                     return false;
                 }
             }
@@ -155,54 +155,83 @@ const reset = () => {
     return{playAgain, quit,popup}
 }
 
-const winningCombo = [
-    ["0","1","2"], 
-    ["3","4","5"], 
-    ["6","7","8"],
-    ["0","3","6"], 
-    ["1","4","7"], 
-    ["2","5","8"],
-    ["0","4","8"], 
-    ["2","4","6"]
-];
-function win(){
-    let k = 0;
-    let a = 0;
-    for(let i = 0; i < winningCombo.length; i++){
-        //reset when exiting a winning combo array
-        a = 0;
-        k = 0;
-        for(let j = 0; j < 3; j++){
-            //get the cell in a winningCombo value 
-            const cell = document.getElementById(winningCombo[i][j]);
-            console.log(winningCombo[i][j], k, a, cell);
-            //if the cells inside of one of the arrays all have a x class,
-            //return iterate k until it reaches 3 (a valid combo with the same markers)
-            if(winningCombo[i][j] == cell.id && cell.classList.contains("x")){
-                k++;
-                if(k >= 3){
-                    return true;
-                }
-            }
-            else if(winningCombo[i][j] == cell.id && cell.classList.contains("o")){
-                a++;
-                if(a >= 3){
-                    return true;
-                }
-            } 
-        }
-    }
-    return false;
-}
-
-function availableCellsArray(){
-    const newArr = gameBoard.boardArray.filter(element => {
+function availableCellsArray(array){
+    const newArr = array.filter(element => {
         //return array with integer element values
         return typeof element == 'number';
     })
     return newArr;
 }
-body.addEventListener("click", () => {
-    console.log(availableCellsArray())
-})
 
+
+
+function minimax(boardClone, player, maximizer) {
+    const availableCells = availableCellsArray(boardClone);
+
+    if (checkIfWinnerFound(boardClone, 'x')) {
+        return { score: -1 };
+    } else if (checkIfWinnerFound(boardClone, 'o')) {
+        return { score: 1 };
+    } else if (availableCells.length == 0) {
+        return { score: 0 };
+    }
+
+    let moves = [];
+    if (maximizer) {
+        let bestVal = -1000;
+        let bestMove = null; // Store the best move
+        for (let i = 0; i < availableCells.length; i++) {
+            const move = availableCells[i];
+            boardClone[move] = player;
+            let result = minimax(boardClone, 'x', false);
+            boardClone[move] = move; // Undo the move
+            if (result.score > bestVal) {
+                bestVal = result.score;
+                bestMove = move; // Update the best move
+            }
+        }
+        return { score: bestVal, move: bestMove };
+    } else {
+        let bestVal = 1000;
+        for (let i = 0; i < availableCells.length; i++) {
+            const move = availableCells[i];
+            boardClone[move] = player;
+            let result = minimax(boardClone, 'o', true);
+            boardClone[move] = move; // Undo the move
+            if (result.score < bestVal) {
+                bestVal = result.score;
+                moves.push(move); // Add the move to the list of best moves
+            }
+        }
+        return { score: bestVal, moves: moves };
+    }
+}
+
+function bestMove(){
+    return minimax(gameBoard.boardArray, 'o', true).move;
+}
+function placeAiMarker(){
+    const bestIndex = bestMove();
+    gameBoard.boardArray[bestIndex] = gameBoard.aiMarker;
+    const cell = document.getElementById(bestIndex);
+    cell.textContent = 'o';
+    cell.classList.add("o")
+
+}
+
+function checkIfWinnerFound(boardState, currentMarker) {
+    if (
+        (boardState[0] === currentMarker && boardState[1] === currentMarker && boardState[2] === currentMarker) ||
+        (boardState[3] === currentMarker && boardState[4] === currentMarker && boardState[5] === currentMarker) ||
+        (boardState[6] === currentMarker && boardState[7] === currentMarker && boardState[8] === currentMarker) ||
+        (boardState[0] === currentMarker && boardState[3] === currentMarker && boardState[6] === currentMarker) ||
+        (boardState[1] === currentMarker && boardState[4] === currentMarker && boardState[7] === currentMarker) ||
+        (boardState[2] === currentMarker && boardState[5] === currentMarker && boardState[8] === currentMarker) ||
+        (boardState[0] === currentMarker && boardState[4] === currentMarker && boardState[8] === currentMarker) ||
+        (boardState[2] === currentMarker && boardState[4] === currentMarker && boardState[6] === currentMarker)
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
