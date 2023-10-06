@@ -18,7 +18,7 @@ const gameBoard = (() => {
                     let id = e.target.id;
                     gameBoard.boardArray[id] = playerMarker;
                     e.target.textContent = playerMarker;
-                    e.target.classList.add(playerMarker);
+                    e.target.classList.add(playerMarker, 'transition-text');
 
                     const win = winner();
                     //after user places marker, ai places 
@@ -61,7 +61,7 @@ function aiPlaceMarker(){
         randomCell = document.getElementById(randomID);
     }while(randomCell.textContent != "" && !winner().tie)
     gameBoard.boardArray[randomID] = gameBoard.aiMarker;
-    randomCell.classList.add(gameBoard.aiMarker);
+    randomCell.classList.add(gameBoard.aiMarker, 'transition-text');
     randomCell.textContent = gameBoard.aiMarker;
 }
 

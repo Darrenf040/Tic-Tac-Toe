@@ -18,7 +18,7 @@ body{
     display: grid;
     justify-content: center;
     align-items: center;
-    font-size: 5rem;
+    font-size: 1rem;
     cursor: pointer;
 }
 button{
@@ -55,4 +55,7 @@ img{
     width: 330px;
     justify-content: space-between;
 }
-/*styles hard.html file aswell*/
+.transition-text{
+    transition: all .5s;
+    font-size: 5rem;
+}
