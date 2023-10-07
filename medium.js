@@ -20,7 +20,7 @@ const gameBoard = (() => {
                     let id = e.target.id;
                     gameBoard.boardArray[id] = playerMarker;
                     e.target.textContent = playerMarker;
-                    e.target.classList.add(playerMarker);
+                    e.target.classList.add(playerMarker, 'transition-text');
 
                     const win = winner();
                     //after user places marker, ai places 
@@ -102,11 +102,15 @@ const winner = () => {
         //check if the other columns with winning indexes text match
             if(board[a] && board[a] == board[b] && board[a] == board[c]){
                 //if player marker matches with the winning markers then player wins
+                const winningCells = document.querySelectorAll(`#\\3${a} ,#\\3${b} ,#\\3${c} `);
                 if(playerMarker == board[a]){
+                    msgContainer.textContent = "You Win";
+                    winningCells.forEach(element => {element.classList.add("win")})
                     return true;
                 }
                 //ai wins
                 else {
+                    winningCells.forEach(element => {element.classList.add("lose")})
                     return false;
                 }
             }
@@ -172,7 +176,7 @@ function aiRandomPlaceMarker(){
         randomCell = document.getElementById(randomID);
     }while(randomCell.textContent != "" && !winner().tie)
     gameBoard.boardArray[randomID] = gameBoard.aiMarker;
-    randomCell.classList.add(gameBoard.aiMarker);
+    randomCell.classList.add(gameBoard.aiMarker, 'transition-text');
     randomCell.textContent = gameBoard.aiMarker;
 }
 
@@ -238,7 +242,7 @@ function placeAiMarker(){
     const cell = document.getElementById(bestIndex);
     cell.textContent = 'o';
     cell.classList.add("o")
-
+    cell.classList.add(gameBoard.aiMarker, 'transition-text');
 }
 
 function checkIfWinnerFound(boardState, currentMarker) {

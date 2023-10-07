@@ -62,3 +62,9 @@ img{
 .win{
     background-color: green;
 }
+.lose{
+    background-color: red;
+}
+.cell:hover{
+    background-color: black;
+}
