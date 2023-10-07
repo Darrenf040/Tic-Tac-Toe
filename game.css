@@ -59,3 +59,6 @@ img{
     transition: all .5s;
     font-size: 5rem;
 }
+.win{
+    background-color: green;
+}

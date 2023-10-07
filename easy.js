@@ -103,6 +103,8 @@ const winner = () => {
         //check if the other columns with winning indexes text match
             if(board[a] && board[a] == board[b] && board[a] == board[c]){
                 //if player marker matches with the winning markers then player wins
+                const winningCells = document.querySelectorAll(`#\\3${a} ,#\\3${b} ,#\\3${c} `);
+                winningCells.forEach(element => {element.classList.add("win")})
                 if(playerMarker == board[a]){
                     msgContainer.textContent = "You Win";
                     return true;
