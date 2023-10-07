@@ -24,7 +24,6 @@ const gameBoard = (() => {
 
                     const win = winner();
                     //after user places marker, ai places 
-                    console.log(unbeatable);
                     if(!win.isWinner && !win.tie){
                         if(unbeatable){
                             placeAiMarker();
@@ -65,13 +64,12 @@ const gameBoard = (() => {
 
 function playerTurn (){
     const chooseTurn = [true, false];
-    // const turn = chooseTurn[Math.floor(Math.random() * 2)];
-    let turn = true;
+    const turn = false;
     if(turn){
         return;
     }
     else{
-        //return minimax function
+        aiRandomPlaceMarker();
     }
 };
 playerTurn()
